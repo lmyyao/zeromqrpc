@@ -71,10 +71,12 @@ class Task(object):
         bases.append(cls)
         for base in bases:
             for key, value in base.__dict__.items():
-                if isinstance(value, types.FunctionType):
+                if isinstance(value, types.FunctionType) and (not key.startswith("__")):
                     router[key] = value
         cls.router = router
-        return object.__new__(cls, *args, **kwargs)
+        # TypeError: object() takes no parameters
+        # object.__new_(cls, *args, **kwargs)
+        return super(Task, cls).__new__(cls)
 
 
 class Application(object):
